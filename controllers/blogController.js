@@ -11,7 +11,7 @@ const blogController = {
         try {
     
      // check body format
-     console.log("testlog");
+
      const blogSchema = Joi.object({
         title: Joi.string().required(),
       author: Joi.string().regex(mongoDBPattern).required(),
@@ -76,7 +76,6 @@ const blogController = {
         return res.apiSuccess({}, 'Blog created Successfully', 201, true );
 
     } catch (error) {
-            console.log("last",error);
             return next(error);
     }
 
