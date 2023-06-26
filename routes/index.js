@@ -19,5 +19,13 @@ router.get('/refresh', authController.refresh);
 
 router.post('/createblog', auth, blogController.createblog  );
 
+router.get('/getallblogs', auth, blogController.getallblogs);
+
+router.get('/getblogbyid', auth, blogController.getBlogbyid);
+
+router.get('/deleteblogbyid', auth, blogController.deleteblogbyid);
+
+router.patch('/updateblogbyid', auth, blogController.updateblog);
+
 
 module.exports= router;

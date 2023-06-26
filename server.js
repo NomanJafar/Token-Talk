@@ -5,18 +5,19 @@ const router = require('./routes');
 const errorHandler = require('./middlewares/errorHandler');
 const standardizeResponse = require('./middlewares/standardrizeResponse');
 const cookieParser = require('cookie-parser');
-connectToDB();
 const app = express();
+connectToDB();
 
 app.use(cookieParser());
 
 app.use(express.json({ limit: "50mb" }));
 
 
-app.use("/storage", express.static("storage"));
 
+console.log("entered server js");
 app.use(standardizeResponse);
-app.use(router)
+app.use("/storage", express.static("storage"));
+app.use(router);
 app.use(errorHandler);
 
 

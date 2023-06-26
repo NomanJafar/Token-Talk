@@ -27,6 +27,7 @@ const auth = async (req, res, next) => {
             const user = await User.findById(_id);
             const userDto = new UserDTO(user);
             req.user = userDto;
+            req.id=_id;
             return next();
         } catch (error) {
             return next({ status: 401, message: "user not found" });
