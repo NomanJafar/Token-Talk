@@ -14,7 +14,6 @@ app.use(express.json({ limit: "50mb" }));
 
 
 
-console.log("entered server js");
 app.use(standardizeResponse);
 app.use("/storage", express.static("storage"));
 app.use(router);

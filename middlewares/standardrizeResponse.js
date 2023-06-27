@@ -1,6 +1,5 @@
 // Custom middleware to standardize the response object
-const standardizeResponse = (req, res, next) => {
-  console.log("res from standardize response", res);
+const standardizeResponse =  (req, res, next) => {
   res.apiSuccess = (data, message = 'Success', statusCode = 200, auth = false) => {
     res.status(statusCode).json({
       success: true,

@@ -23,7 +23,7 @@ router.get('/getallblogs', auth, blogController.getallblogs);
 
 router.get('/getblogbyid', auth, blogController.getBlogbyid);
 
-router.get('/deleteblogbyid', auth, blogController.deleteblogbyid);
+router.delete('/deleteblogbyid', auth, blogController.deleteblogbyid);
 
 router.patch('/updateblogbyid', auth, blogController.updateblog);
 

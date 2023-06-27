@@ -165,72 +165,74 @@ const blogController = {
     async updateblog(req, res, next) {
 
         const updateSchema = Joi.object({
-            blog_id:Joi.string().regex(mongoDBPattern).required(),
+            blog_id: Joi.string().regex(mongoDBPattern).required(),
             title: Joi.string(),
             content: Joi.string(),
+            image: Joi.string()
         })
+
         const { error } = updateSchema.validate(req.body);
 
         if (error) {
             return next(error);
         }
 
-        const { blog_id,title, content, image } = req.body;
+        const { blog_id, title, content, image } = req.body;
 
 
         // get the blog that is needed to update
 
-        
+
         let previousBlog;
         try {
-         previousBlog = await Blog.findById({_id:blog_id});
-            
+            previousBlog = await Blog.findById({ _id: blog_id });
+
         } catch (error) {
             return next(error);
         }
 
         try {
             // if there is any image to update            
-            if(image){
+            if (image) {
 
-            // read image as buffer 
-            const buffer = Buffer.from(image.replace(/^data:image\/(png|jpg|jpeg);base64,/, ''), 'base64');
+                // read image as buffer 
+                const buffer = Buffer.from(image.replace(/^data:image\/(png|jpg|jpeg);base64,/, ''), 'base64');
 
-            // give Image a name
-         imageName = `${Date.now()}-${previousBlog.author}.png`;
+                // give Image a name
+                imageName = `${Date.now()}-${previousBlog.author}.png`;
 
-            // Store Image Locally
-            try {
-                fs.writeFileSync(`storage/${imageName}`, buffer);
-            } catch (error) {
-                return next(error);
-            }
+                // Store Image Locally
+                try {
+                    fs.writeFileSync(`storage/${imageName}`, buffer);
+                } catch (error) {
+                    return next(error);
+                }
 
             }
 
             // remove previous image from storage
-            const photopath = blogToUpdate.photopath;
+            const photopath = previousBlog.photopath;
             const path = photopath.split("/").at(-1);
-            fs.unlinkSync(`storage/${path}`); 
+            fs.unlinkSync(`storage/${path}`);
 
 
             const blogToUpdate = {
-            ...req.body,
-            blog_id:undefined,
-            photopath:`${BACKEND_SERVER_PATH}/storage/${photopath}`
+                ...req.body,
+                blog_id: undefined,
+                photopath: `${BACKEND_SERVER_PATH}/storage/${photopath}.png`
             }
 
             const blog = await Blog.findByIdAndUpdate(blog_id, { ...blogToUpdate });
-            if(blog){
+            if (blog) {
                 return res.apiSuccess({ blog }, "blog updated successfully", 200, true);
             }
-            else{
-                return res.apiSuccess({blog},"blog with this id is not found", true);
+            else {
+                return res.apiSuccess({ blog }, "blog with this id is not found", true);
             }
 
 
         } catch (error) {
-          return  next(error);
+            return next(error);
         }
 
     }
